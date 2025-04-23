@@ -1,15 +1,28 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 const HomePage = () => {
+  const location = useLocation();
+  
   // Ensure background is set immediately upon component mount
   useEffect(() => {
     document.body.style.backgroundColor = "#1f2937";
     document.documentElement.style.backgroundColor = "#1f2937";
     
+    // Handle scroll if coming from another page with scroll instruction
+    if (location.state?.scrollTo) {
+      setTimeout(() => {
+        const element = document.getElementById(location.state.scrollTo);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+    
     return () => {
       // No need to reset as App component maintains this
     };
-  }, []);
+  }, [location]);
 
   return (
     <div className="bg-[#1f2937] min-h-screen">

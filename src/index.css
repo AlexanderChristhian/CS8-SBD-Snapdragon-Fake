@@ -9,6 +9,13 @@
   box-sizing: border-box;
 }
 
+/* Set default scroll behavior for html element */
+html {
+  --scrollbar-width: 0px;
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -27,4 +34,23 @@ body {
   flex-direction: column;
   min-height: 100vh;
   width: 100%;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #4a4a4a;
+  border-radius: 6px;
+  border: 2px solid #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #5a5a5a;
 }

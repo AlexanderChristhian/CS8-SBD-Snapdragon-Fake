@@ -1,18 +1,36 @@
 import { useState, useRef, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const Navbar = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [searchActive, setSearchActive] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const searchRef = useRef(null);
+    const navigate = useNavigate();
+    const location = useLocation();
     
     const scrollToSection = (sectionId) => {
-        const element = document.getElementById(sectionId);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-            setMobileMenuOpen(false);
+        if (location.pathname === '/home') {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+                setMobileMenuOpen(false);
+            }
+        } else {
+            navigate('/home', { state: { scrollTo: sectionId } });
         }
     };
+    
+    useEffect(() => {
+        if (location.pathname === '/home' && location.state?.scrollTo) {
+            setTimeout(() => {
+                const element = document.getElementById(location.state.scrollTo);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 100);
+        }
+    }, [location]);
     
     useEffect(() => {
         function handleClickOutside(event) {
@@ -36,11 +54,13 @@ const Navbar = () => {
     };
 
     return (
-        <div className="fixed top-0 left-0 right-0 z-50">
+        <div className="fixed top-0 left-0 right-0 z-50 pr-[var(--scrollbar-width)]">
             <div className="flex justify-center">
                 <div className="w-full">
                     <nav className="bg-[#000000] p-4 flex justify-between items-center">
-                        <img src="/snapdragon_logo.png" alt="Logo" className="h-12 md:h-16" />
+                        <Link to="/home">
+                            <img src="/snapdragon_logo.png" alt="Logo" className="h-12 md:h-16 cursor-pointer transition-transform hover:scale-105" />
+                        </Link>
                         
                         <button 
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -61,7 +81,6 @@ const Navbar = () => {
                             <ul className="flex space-x-6 ml-6">
                                 <li>
                                     <a 
-                                        href="#products" 
                                         onClick={(e) => {
                                             e.preventDefault();
                                             scrollToSection('products');
@@ -73,7 +92,6 @@ const Navbar = () => {
                                 </li>
                                 <li>
                                     <a 
-                                        href="#support" 
                                         onClick={(e) => {
                                             e.preventDefault();
                                             scrollToSection('support');
@@ -85,7 +103,6 @@ const Navbar = () => {
                                 </li>
                                 <li>
                                     <a 
-                                        href="#company" 
                                         onClick={(e) => {
                                             e.preventDefault();
                                             scrollToSection('partners');
@@ -130,21 +147,21 @@ const Navbar = () => {
                                 </div>
                                 
                                 <div className="relative group">
-                                    <a href="#" className="text-white flex items-center">
+                                    <Link to="/login" className="text-white flex items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                         </svg>
-                                    </a>
+                                    </Link>
                                     <div className="absolute z-50 right-0 mt-2 w-64 bg-white rounded-md shadow-lg p-4 
                                         opacity-0 invisible group-hover:opacity-100 group-hover:visible 
                                         transition-all duration-300 ease-in-out transform 
                                         scale-95 group-hover:scale-100">
                                         <h3 className="text-lg font-semibold mb-4 text-black">Sign in to your account</h3>
-                                        <a href="/login" className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md w-full block text-center mb-4">
+                                        <Link to="/login" className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md w-full block text-center mb-4">
                                             Sign in
-                                        </a>
+                                        </Link>
                                         <div className="text-sm text-gray-700">
-                                            Don't have an account? <a href="/signup" className="text-blue-600 font-medium">Sign up →</a>
+                                            Don't have an account? <Link to="/signup" className="text-blue-600 font-medium">Sign up →</Link>
                                         </div>
                                     </div>
                                 </div>
@@ -155,7 +172,6 @@ const Navbar = () => {
                     <div className={`bg-[#0a0a0a] md:hidden ${mobileMenuOpen ? 'block' : 'hidden'} transition-all duration-300`}>
                         <div className="px-2 pt-2 pb-3 space-y-1">
                             <a 
-                                href="#products"
                                 onClick={(e) => {
                                     e.preventDefault(); 
                                     scrollToSection('products');
@@ -165,7 +181,6 @@ const Navbar = () => {
                                 Products
                             </a>
                             <a 
-                                href="#support"
                                 onClick={(e) => {
                                     e.preventDefault(); 
                                     scrollToSection('support');
@@ -175,7 +190,6 @@ const Navbar = () => {
                                 Support
                             </a>
                             <a 
-                                href="#partners"
                                 onClick={(e) => {
                                     e.preventDefault(); 
                                     scrollToSection('partners');
@@ -204,11 +218,11 @@ const Navbar = () => {
                                         </button>
                                     </div>
                                 </form>
-                                <a href="/login" className="text-white">
+                                <Link to="/login" className="text-white">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                                     </svg>
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>
