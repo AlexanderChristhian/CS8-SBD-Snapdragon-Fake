@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/snapdragon_logo_web.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snapdragon</title>
+    <style>
+      /* Immediate styles to prevent flash of white */
+      html, body, #root {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #1f2937;
+      }
+      
+      body {
+        overflow-x: hidden;
+        color: white;
+      }
+      
+      #root {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      
+      /* Hide content until fully loaded */
+      .js-loading * {
+        -webkit-transition: none !important;
+        -moz-transition: none !important;
+        -ms-transition: none !important;
+        -o-transition: none !important;
+        transition: none !important;
+      }
+    </style>
+    <script>
+      // Add loading class to prevent transition flashes
+      document.documentElement.classList.add('js-loading');
+      
+      // Remove loading class after everything has loaded
+      window.addEventListener('load', function() {
+        document.documentElement.classList.remove('js-loading');
+      }, false);
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
